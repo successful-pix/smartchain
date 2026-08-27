@@ -1,13 +1,13 @@
-import { ArrowDownToLine, ArrowUpFromLine, Repeat, Send } from "lucide-react";
+import { ArrowDownToLine, ArrowUpFromLine, Send, TrendingUp } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
 
 interface QuickAction { id: string; label: string; icon: LucideIcon; to: string; }
 const actions: QuickAction[] = [
+  { id: "trade", label: "Trade", icon: TrendingUp, to: "/trade" },
   { id: "deposit", label: "Receive", icon: ArrowDownToLine, to: "/receive" },
   { id: "withdraw", label: "Withdraw", icon: ArrowUpFromLine, to: "/withdraw" },
   { id: "send", label: "Send", icon: Send, to: "/send" },
-  { id: "swap", label: "Swap", icon: Repeat, to: "/swap" },
 ];
 
 export function QuickActions() {
