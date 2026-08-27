@@ -5,7 +5,8 @@ import { QuickActions } from "@/components/wallet/QuickActions";
 import { AssetList } from "@/components/wallet/AssetList";
 import { RecentActivity } from "@/components/wallet/RecentActivity";
 import { BottomNavigation } from "@/components/wallet/BottomNavigation";
-import { mockWallet } from "@/data/mock-wallet";
+import { useMarkets } from "@/hooks/useMarkets";
+import type { AssetPosition, PortfolioSummary } from "@/types/wallet";
 
 const title = "SmartChain Wallet — Secure Crypto Dashboard";
 const description =
@@ -23,19 +24,38 @@ export const Route = createFileRoute("/")({
   component: Dashboard,
 });
 
+const emptyPortfolio: PortfolioSummary = {
+  currency: "USD",
+  availableBalance: 0,
+  changePercentToday: 0,
+  changeValueToday: 0,
+};
+
 function Dashboard() {
-  const { portfolio, assets, transactions } = mockWallet;
+  const { markets, isLoading, error, refetch } = useMarkets();
+
+  // No signed-in wallet yet, so every position starts at a zero balance.
+  const positions: AssetPosition[] = markets.map((market) => ({
+    market,
+    balance: 0,
+    fiatValue: 0,
+  }));
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      <AppHeader notificationCount={2} />
+      <AppHeader notificationCount={0} />
 
       <main className="mx-auto max-w-lg space-y-6 px-4 pt-5">
         <h1 className="sr-only">SmartChain wallet dashboard</h1>
-        <BalanceCard portfolio={portfolio} />
+        <BalanceCard portfolio={emptyPortfolio} loading={isLoading} />
         <QuickActions />
-        <AssetList assets={assets} />
-        <RecentActivity transactions={transactions} />
+        <AssetList
+          positions={positions}
+          loading={isLoading}
+          error={error ? (error as Error).message : null}
+          onRetry={() => void refetch()}
+        />
+        <RecentActivity transactions={[]} />
       </main>
 
       <BottomNavigation active="home" />

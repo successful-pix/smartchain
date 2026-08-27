@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { Coins } from "lucide-react";
 import type { AssetPosition } from "@/types/wallet";
 import { AssetRow } from "./AssetRow";
@@ -9,7 +8,7 @@ interface AssetListProps {
   loading?: boolean;
   error?: string | null;
   onRetry?: () => void;
-  showViewAll?: boolean;
+  onViewAll?: () => void;
   showHolding?: boolean;
   title?: string;
 }
@@ -19,7 +18,7 @@ export function AssetList({
   loading = false,
   error = null,
   onRetry,
-  showViewAll = false,
+  onViewAll,
   showHolding = true,
   title = "Assets",
 }: AssetListProps) {
@@ -52,13 +51,14 @@ export function AssetList({
         )}
       </div>
 
-      {showViewAll && (
-        <Link
-          to="/wallet"
-          className="mt-3 block w-full rounded-[10px] border border-primary/30 bg-primary/10 py-2.5 text-center text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      {onViewAll && (
+        <button
+          type="button"
+          onClick={onViewAll}
+          className="mt-3 w-full rounded-[10px] border border-primary/30 bg-primary/10 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           View All Assets
-        </Link>
+        </button>
       )}
     </section>
   );

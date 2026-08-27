@@ -1,6 +1,6 @@
 import { History } from "lucide-react";
 import type { WalletTransaction } from "@/types/wallet";
-import { formatFiat } from "@/data/mock-wallet";
+import { formatFiat } from "@/lib/format";
 
 interface RecentActivityProps {
   transactions: WalletTransaction[];
@@ -39,7 +39,7 @@ export function RecentActivity({ transactions, loading = false }: RecentActivity
                   {tx.type} {tx.symbol}
                 </span>
                 <span className="text-sm tabular-nums text-muted-foreground">
-                  {formatFiat(tx.fiatValue)}
+                  {formatFiat(tx.fiat_value)}
                 </span>
               </li>
             ))}
