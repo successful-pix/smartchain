@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import type { PortfolioSummary } from "@/types/wallet";
-import { formatFiat, formatPercent } from "@/data/mock-wallet";
+import { formatFiat, formatPercent } from "@/lib/format";
 
 interface BalanceCardProps {
   portfolio: PortfolioSummary;
