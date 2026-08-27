@@ -1,24 +1,44 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AppHeader } from "@/components/wallet/AppHeader";
+import { BalanceCard } from "@/components/wallet/BalanceCard";
+import { QuickActions } from "@/components/wallet/QuickActions";
+import { AssetList } from "@/components/wallet/AssetList";
+import { RecentActivity } from "@/components/wallet/RecentActivity";
+import { BottomNavigation } from "@/components/wallet/BottomNavigation";
+import { mockWallet } from "@/data/mock-wallet";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const title = "SmartChain Wallet — Secure Crypto Dashboard";
+const description =
+  "SmartChain is a premium crypto wallet dashboard: track balances, assets and activity in one secure mobile-first interface.";
+
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+    ],
+  }),
+  component: Dashboard,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Dashboard() {
+  const { portfolio, assets, transactions } = mockWallet;
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background pb-24">
+      <AppHeader notificationCount={2} />
+
+      <main className="mx-auto max-w-lg space-y-6 px-4 pt-5">
+        <h1 className="sr-only">SmartChain wallet dashboard</h1>
+        <BalanceCard portfolio={portfolio} />
+        <QuickActions />
+        <AssetList assets={assets} />
+        <RecentActivity transactions={transactions} />
+      </main>
+
+      <BottomNavigation active="home" />
     </div>
   );
 }
