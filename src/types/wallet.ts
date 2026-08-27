@@ -1,39 +1,55 @@
 /**
  * Core wallet domain types.
- * These are shaped so real APIs (prices, balances, chain data) can be
- * connected later without changing the Dashboard components.
+ * Market data comes from the market-data provider service; holdings and
+ * transactions come from the user's own secured database rows.
  */
 
 export type AssetSymbol = string;
 
-export interface WalletAsset {
+/** Live market data for one coin. */
+export interface MarketAsset {
   id: string;
   name: string;
   symbol: AssetSymbol;
-  /** Amount held, in the asset's own units. */
-  balance: number;
-  /** Fiat value of the holding, in the display currency. */
-  fiatValue: number;
-  /** Price change over the last 24h, in percent. */
+  image: string;
+  price: number;
   changePercent24h: number;
-  /** Brand color used for the coin badge. */
-  color: string;
-  /** Short glyph used until real coin artwork is wired up. */
-  glyph: string;
+  marketCap: number;
+  volume24h: number;
+  sparkline: number[];
+}
+
+/** A coin row combining live market data with the user's own balance. */
+export interface AssetPosition {
+  market: MarketAsset;
+  balance: number;
+  fiatValue: number;
 }
 
 export type TransactionType = "deposit" | "withdraw" | "send" | "receive" | "swap";
-export type TransactionStatus = "pending" | "completed" | "failed";
+export type TransactionStatus = "pending" | "completed" | "failed" | "cancelled";
 
 export interface WalletTransaction {
   id: string;
   type: TransactionType;
+  asset_id: string;
   symbol: AssetSymbol;
   amount: number;
-  fiatValue: number;
+  fiat_value: number;
   status: TransactionStatus;
-  /** ISO 8601 timestamp. */
-  createdAt: string;
+  is_onchain: boolean;
+  reference: string;
+  counterparty: string | null;
+  network: string | null;
+  note: string | null;
+  created_at: string;
+}
+
+export interface WalletHolding {
+  id: string;
+  asset_id: string;
+  symbol: AssetSymbol;
+  balance: number;
 }
 
 export interface PortfolioSummary {
@@ -43,8 +59,26 @@ export interface PortfolioSummary {
   changeValueToday: number;
 }
 
-export interface WalletSnapshot {
-  portfolio: PortfolioSummary;
-  assets: WalletAsset[];
-  transactions: WalletTransaction[];
+export interface AppNotification {
+  id: string;
+  category: "security" | "account" | "transaction";
+  title: string;
+  body: string | null;
+  read: boolean;
+  created_at: string;
+}
+
+export interface UserPreferences {
+  user_id: string;
+  currency: string;
+  hide_balance: boolean;
+  notify_security: boolean;
+  notify_transactions: boolean;
+  notify_marketing: boolean;
+}
+
+export interface Profile {
+  id: string;
+  display_name: string | null;
+  avatar_url: string | null;
 }

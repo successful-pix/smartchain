@@ -1,26 +1,23 @@
+import { Link } from "@tanstack/react-router";
 import { CandlestickChart, Home, LineChart, User, Wallet } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 interface NavTab {
-  id: string;
+  to: string;
   label: string;
   icon: LucideIcon;
+  exact?: boolean;
 }
 
 const tabs: NavTab[] = [
-  { id: "home", label: "Home", icon: Home },
-  { id: "markets", label: "Markets", icon: LineChart },
-  { id: "trade", label: "Trade", icon: CandlestickChart },
-  { id: "wallet", label: "Wallet", icon: Wallet },
-  { id: "account", label: "Account", icon: User },
+  { to: "/", label: "Home", icon: Home, exact: true },
+  { to: "/markets", label: "Markets", icon: LineChart },
+  { to: "/swap", label: "Trade", icon: CandlestickChart },
+  { to: "/wallet", label: "Wallet", icon: Wallet },
+  { to: "/account", label: "Account", icon: User },
 ];
 
-interface BottomNavigationProps {
-  active?: string;
-  onSelect?: (id: string) => void;
-}
-
-export function BottomNavigation({ active = "home", onSelect }: BottomNavigationProps) {
+export function BottomNavigation() {
   return (
     <nav
       aria-label="Primary"
@@ -28,24 +25,20 @@ export function BottomNavigation({ active = "home", onSelect }: BottomNavigation
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <ul className="mx-auto grid max-w-lg grid-cols-5">
-        {tabs.map(({ id, label, icon: Icon }) => {
-          const isActive = id === active;
-          return (
-            <li key={id}>
-              <button
-                type="button"
-                onClick={() => onSelect?.(id)}
-                aria-current={isActive ? "page" : undefined}
-                className={`flex w-full flex-col items-center gap-1 py-2.5 text-[10px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ring ${
-                  isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Icon size={19} strokeWidth={isActive ? 2.4 : 1.8} />
-                {label}
-              </button>
-            </li>
-          );
-        })}
+        {tabs.map(({ to, label, icon: Icon, exact }) => (
+          <li key={to}>
+            <Link
+              to={to}
+              activeOptions={{ exact: !!exact }}
+              activeProps={{ className: "text-primary", "aria-current": "page" }}
+              inactiveProps={{ className: "text-muted-foreground hover:text-foreground" }}
+              className="flex w-full flex-col items-center gap-1 py-2.5 text-[10px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ring"
+            >
+              <Icon size={19} />
+              {label}
+            </Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );
