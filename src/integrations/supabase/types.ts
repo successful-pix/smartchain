@@ -14,7 +14,177 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      notifications: {
+        Row: {
+          body: string | null
+          category: string
+          created_at: string
+          id: string
+          read: boolean
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          category?: string
+          created_at?: string
+          id?: string
+          read?: boolean
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          category?: string
+          created_at?: string
+          id?: string
+          read?: boolean
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          asset_id: string
+          counterparty: string | null
+          created_at: string
+          fiat_value: number
+          id: string
+          is_onchain: boolean
+          network: string | null
+          note: string | null
+          reference: string
+          status: string
+          symbol: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          asset_id: string
+          counterparty?: string | null
+          created_at?: string
+          fiat_value?: number
+          id?: string
+          is_onchain?: boolean
+          network?: string | null
+          note?: string | null
+          reference?: string
+          status?: string
+          symbol: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          asset_id?: string
+          counterparty?: string | null
+          created_at?: string
+          fiat_value?: number
+          id?: string
+          is_onchain?: boolean
+          network?: string | null
+          note?: string | null
+          reference?: string
+          status?: string
+          symbol?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          created_at: string
+          currency: string
+          hide_balance: boolean
+          notify_marketing: boolean
+          notify_security: boolean
+          notify_transactions: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          hide_balance?: boolean
+          notify_marketing?: boolean
+          notify_security?: boolean
+          notify_transactions?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          hide_balance?: boolean
+          notify_marketing?: boolean
+          notify_security?: boolean
+          notify_transactions?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallet_holdings: {
+        Row: {
+          asset_id: string
+          balance: number
+          created_at: string
+          id: string
+          symbol: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          asset_id: string
+          balance?: number
+          created_at?: string
+          id?: string
+          symbol: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          asset_id?: string
+          balance?: number
+          created_at?: string
+          id?: string
+          symbol?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
