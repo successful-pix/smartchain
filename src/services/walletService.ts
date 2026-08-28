@@ -14,7 +14,16 @@ export async function getHoldings(): Promise<WalletHolding[]> {
   const { data, error } = await supabase
     .from("wallet_holdings")
     .select("id, asset_id, symbol, balance");
-  if (error) throw new Error(error.message);
+
+  // Holdings are optional display data. A missing table, stale schema cache,
+  // or RLS/permission problem must never prevent the market/asset list from
+  // loading. Treat the wallet as having zero stored holdings until the DB is
+  // repaired, while logging the real error for diagnostics.
+  if (error) {
+    console.warn("[wallet] wallet_holdings unavailable; using zero balances", error.message);
+    return [];
+  }
+
   return (data ?? []).map((row) => ({
     id: row.id,
     asset_id: row.asset_id,
