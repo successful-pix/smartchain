@@ -94,7 +94,9 @@ export function usePortfolio() {
     positions,
     holdings,
     markets,
+    // Market data is what determines whether the listed assets can render.
+    // A missing/failed holdings table should not hide the 15 market assets.
     loading: markets.isLoading || holdings.isLoading,
-    error: markets.error ?? holdings.error,
+    error: markets.error,
   };
 }
