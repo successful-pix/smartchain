@@ -15,10 +15,6 @@ export async function getHoldings(): Promise<WalletHolding[]> {
     .from("wallet_holdings")
     .select("id, asset_id, symbol, balance");
 
-  // Holdings are optional display data. A missing table, stale schema cache,
-  // or RLS/permission problem must never prevent the market/asset list from
-  // loading. Treat the wallet as having zero stored holdings until the DB is
-  // repaired, while logging the real error for diagnostics.
   if (error) {
     console.warn("[wallet] wallet_holdings unavailable; using zero balances", error.message);
     return [];
@@ -38,7 +34,14 @@ export async function getTransactions(limit = 50): Promise<WalletTransaction[]> 
     .select("*")
     .order("created_at", { ascending: false })
     .limit(limit);
-  if (error) throw new Error(error.message);
+
+  // Recent activity is optional dashboard data. A missing table, stale schema
+  // cache, or RLS/permission issue must never make the Assets list fail.
+  if (error) {
+    console.warn("[wallet] transactions unavailable; showing empty activity", error.message);
+    return [];
+  }
+
   return (data ?? []).map((row) => ({
     id: row.id,
     type: row.type as TransactionType,
@@ -107,7 +110,10 @@ export async function getNotifications(): Promise<AppNotification[]> {
     .select("*")
     .order("created_at", { ascending: false })
     .limit(50);
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.warn("[wallet] notifications unavailable", error.message);
+    return [];
+  }
   return (data ?? []) as AppNotification[];
 }
 
